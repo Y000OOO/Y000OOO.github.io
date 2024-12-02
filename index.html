@@ -1,62 +1,53 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rubik&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <script src="//code.jivosite.com/widget/1gSMT3Mxwb" async></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monarca SI</title>
-    
-
-    <!-- Vincular el archivo manifest -->
-    <link href="css/style.css" rel="stylesheet">
+    <title>Lista de Tareas - PWA</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
-
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { max-width: 400px; margin: 0 auto; padding: 20px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; }
-        button { width: 100%; padding: 10px; background-color: #2e1107; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #2e1107; }
-        h2 { text-align: center; }
-        .message { text-align: center; color: red; }
-    </style>
+    <script defer src="app.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Registro</h2>
-        <form id="registro-form">
-            <input type="text" id="nombre" placeholder="Nombre" required>
-            <input type="email" id="email" placeholder="Correo electrónico" required>
-            <input type="password" id="contraseña" placeholder="Contraseña" required>
-            <button type="submit">Registrarse</button>
-        </form>
+    
 
-        <br>
-        <br>
-
-        <h2>Iniciar sesión</h2>
-        <form id="login-form">
-            <input type="email" id="login-email" placeholder="Correo electrónico" required>
-            <input type="password" id="login-contraseña" placeholder="Contraseña" required>
-            <button type="submit">Iniciar sesión</button>
-        </form>
-
-        <p id="message" class="message"></p>
-    </div>
-
-    <script src="app.js"></script>
     <script>
-        // Comprobamos si el navegador soporta Service Workers
+        // Registrar el Service Worker
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(registration => {
-                        console.log('Service Worker registrado con éxito:', registration);
-                    })
-                    .catch(error => {
-                        console.log('Error al registrar el Service Worker:', error);
-                    });
-            });
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('Service Worker registrado:', reg))
+                .catch(err => console.log('Error al registrar el Service Worker:', err));
         }
     </script>
+
+<section class="food_section layout_padding">
+    <div class="form-group">
+        <div class="container">
+        <h1>Pendientes</h1>
+        <form id="task-form">
+            <input type="text" id="task-input" placeholder="Escribe una tarea..." required>
+            <button type="submit">Agregar</button>
+        </form>
+        <ul id="task-list"></ul>
+    </div>
+  </select> 
+</div>
+</section>
 </body>
 </html>
