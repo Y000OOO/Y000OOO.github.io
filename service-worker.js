@@ -6,6 +6,17 @@ self.addEventListener('install', (event) => {
     );
   });
   
+  self.addEventListener('push', (event) => {
+    const options = {
+      body: event.data.text(),
+      icon: 'icon-192x192.png',
+      badge: 'icon-192x192.png'
+    };
+    event.waitUntil(
+      self.registration.showNotification('Nueva Tarea', options)
+    );
+  });
+  
   self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(event.request).then((response) => {

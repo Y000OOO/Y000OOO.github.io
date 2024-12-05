@@ -32,3 +32,30 @@ window.addEventListener('beforeinstallprompt', (event) => {
     });
   });
 });
+
+function notifyUser() {
+  if (Notification.permission === 'granted') {
+    navigator.serviceWorker.getRegistration().then((registration) => {
+      registration.showNotification('Tarea registrada con éxito');
+    });
+  }
+}
+
+document.getElementById('task-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  
+  const taskInput = document.getElementById('task-input');
+  const taskText = taskInput.value.trim();
+  if (taskText) {
+    const taskList = document.getElementById('task-list');
+    const taskItem = document.createElement('li');
+    taskItem.textContent = taskText;
+    taskList.appendChild(taskItem);
+    
+    // Notificar al usuario
+    notifyUser();
+
+    // Limpiar el campo de tarea
+    taskInput.value = '';
+  }
+});
