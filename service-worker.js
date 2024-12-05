@@ -8,7 +8,7 @@ self.addEventListener('install', (event) => {
   
   self.addEventListener('push', (event) => {
     const options = {
-      body: event.data.text(),
+      body: body: event.data ? event.data.text() : 'Tienes una nueva tarea pendiente.',
       icon: 'icon-192x192.png',
       badge: 'icon-192x192.png'
     };
