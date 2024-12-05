@@ -1,70 +1,9 @@
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js')
-        .then((registration) => {
-            console.log('Service Worker registrado:', registration);
-        })
-        .catch((error) => {
-            console.error('Error al registrar el Service Worker:', error);
-        });
-}
-
-document.getElementById('task-form').addEventListener('submit', (event) => {
-    event.preventDefault();
-    const taskInput = document.getElementById('task-input');
-    const task = taskInput.value;
-
-    if (task) {
-        // Agregar tarea a la lista
-        const taskList = document.getElementById('task-list');
-        const listItem = document.createElement('li');
-        listItem.textContent = task;
-        taskList.appendChild(listItem);
-
-        // Limpiar campo de entrada
-        taskInput.value = '';
-
-        // Mostrar notificación
-        if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification('Nueva tarea agregada', { body: task });
-        } else if ('Notification' in window && Notification.permission !== 'denied') {
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    new Notification('Nueva tarea agregada', { body: task });
-                }
-            });
-        }
-    }
-
-    // Verificar si el navegador soporta notificaciones
-if ('Notification' in window) {
-    // Solicitar permiso al usuario
-    Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-            // Enviar una notificación de prueba
-            new Notification('¡Hola!', {
-                body: 'Esta es una notificación de prueba para tu celular.',
-                icon: 'icono.png' // Opcional: Agrega la ruta a tu ícono
-            });
-        } else {
-            console.log('Permiso de notificaciones denegado.');
-        }
-    }).catch(error => {
-        console.error('Error al solicitar permisos:', error);
-    });
-} else {
-    console.log('El navegador no soporta notificaciones.');
-}
-
-});
-
 let deferredPrompt;
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Evita que se muestre el diálogo de instalación automáticamente
-  e.preventDefault();
-  deferredPrompt = e;
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredPrompt = event;
 
-  // Muestra un botón para instalar la PWA manualmente
   const installButton = document.createElement('button');
   installButton.textContent = 'Instalar App';
   installButton.style.cssText = `
@@ -73,7 +12,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
     right: 20px;
     padding: 10px 20px;
     background-color: #875803;
-    color: #fff;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -83,9 +22,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
   installButton.addEventListener('click', () => {
     installButton.style.display = 'none';
     deferredPrompt.prompt();
-
-    deferredPrompt.userChoice.then(choiceResult => {
-      if (choiceResult.outcome === 'accepted') {
+    deferredPrompt.userChoice.then((choice) => {
+      if (choice.outcome === 'accepted') {
         console.log('PWA instalada');
       } else {
         console.log('PWA no instalada');
@@ -94,4 +32,3 @@ window.addEventListener('beforeinstallprompt', (e) => {
     });
   });
 });
-

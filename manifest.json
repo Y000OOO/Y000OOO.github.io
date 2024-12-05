@@ -1,7 +1,6 @@
 {
   "name": "Lista de Tareas",
   "short_name": "Tareas",
-  "description": "Una aplicación para gestionar tus tareas diarias.",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
