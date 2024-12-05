@@ -34,4 +34,64 @@ document.getElementById('task-form').addEventListener('submit', (event) => {
             });
         }
     }
+
+    // Verificar si el navegador soporta notificaciones
+if ('Notification' in window) {
+    // Solicitar permiso al usuario
+    Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+            // Enviar una notificación de prueba
+            new Notification('¡Hola!', {
+                body: 'Esta es una notificación de prueba para tu celular.',
+                icon: 'icono.png' // Opcional: Agrega la ruta a tu ícono
+            });
+        } else {
+            console.log('Permiso de notificaciones denegado.');
+        }
+    }).catch(error => {
+        console.error('Error al solicitar permisos:', error);
+    });
+} else {
+    console.log('El navegador no soporta notificaciones.');
+}
+
 });
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Evita que se muestre el diálogo de instalación automáticamente
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Muestra un botón para instalar la PWA manualmente
+  const installButton = document.createElement('button');
+  installButton.textContent = 'Instalar App';
+  installButton.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #875803;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  `;
+  document.body.appendChild(installButton);
+
+  installButton.addEventListener('click', () => {
+    installButton.style.display = 'none';
+    deferredPrompt.prompt();
+
+    deferredPrompt.userChoice.then(choiceResult => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('PWA instalada');
+      } else {
+        console.log('PWA no instalada');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
+
