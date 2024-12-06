@@ -7,12 +7,12 @@
   "theme_color": "#875803",
   "icons": [
     {
-      "src": "icon-192x192.png",
+      "src": "monarca.png",
       "sizes": "192x192",
       "type": ""
     },
     {
-      "src": "icon-512x512.png",
+      "src": "monarca (1).png",
       "sizes": "512x512",
       "type": ""
     }
