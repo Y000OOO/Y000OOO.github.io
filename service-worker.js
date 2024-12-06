@@ -1,42 +1,26 @@
-const CACHE_NAME = 'mi-app-cache-v1';
-const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192x192.png',
-  './icon-512x512.png'
-];
-
-// Instalar el Service Worker
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('Archivos en caché durante la instalación');
-      return cache.addAll(urlsToCache);
+    caches.open('app-cache').then((cache) => {
+      return cache.addAll(['./', './index.html', './styles.css', './app.js']);
     })
   );
 });
 
-// Activar el Service Worker
-self.addEventListener('activate', event => {
-  console.log('Service Worker activado');
-});
-
-// Manejo de solicitudes
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data.text(),
+    icon: 'icon-192x192.png',
+    badge: 'icon-192x192.png'
+  };
+  event.waitUntil(
+    self.registration.showNotification('Nueva Tarea', options)
   );
 });
 
-// Manejo de notificaciones push
-self.addEventListener('push', event => {
-  const data = event.data ? event.data.text() : 'Notificación sin contenido';
-  const options = {
-    body: data,
-    icon: './icon-192x192.png'
-  };
-  event.waitUntil(
-    self.registration.showNotification('Mi PWA', options)
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
   );
 });
