@@ -80,13 +80,68 @@
                 <form id="task-form">
                     <input type="text" id="task-input" placeholder="Escribe una tarea..." required>
                     <button type="submit">Agregar Tarea</button>
+                    <button id="install-btn" style="display: none;">Instalar Aplicación</button>
                 </form>
                 <ul id="task-list"></ul>
                 <!-- Botón para instalar la aplicación -->
-                <button id="installButton" style="display: none;">Instalar App</button>
+                <!--button id="installButton" style="display: none;">Instalar App</button-->
             </div>
         </div>
     </section>
+    <script>
+    // Registrar el Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').then(() => {
+        console.log('Service Worker registrado correctamente.');
+      }).catch(err => {
+        console.error('Error al registrar el Service Worker:', err);
+      });
+    }
+
+    // Solicitar permisos para notificaciones
+    document.getElementById('notify-btn').addEventListener('click', () => {
+      if (Notification.permission === 'default') {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            enviarNotificacion();
+          } else {
+            alert('Permiso de notificaciones denegado');
+          }
+        });
+      } else if (Notification.permission === 'granted') {
+        enviarNotificacion();
+      } else {
+        alert('Permiso de notificaciones denegado');
+      }
+    });
+
+    function enviarNotificacion() {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.showNotification('Hola desde Mi PWA', {
+          body: 'Esta es una notificación de prueba.',
+          icon: './icon-192x192.png'
+        });
+      });
+    }
+
+    // Manejar la instalación de la PWA
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredPrompt = event;
+      const installBtn = document.getElementById('install-btn');
+      installBtn.style.display = 'block';
+      installBtn.addEventListener('click', () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choice => {
+          if (choice.outcome === 'accepted') {
+            console.log('Aplicación instalada.');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
