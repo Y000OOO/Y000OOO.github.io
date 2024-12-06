@@ -42,34 +42,6 @@
                 .then(reg => console.log('Service Worker registrado:', reg))
                 .catch(err => console.log('Error al registrar el Service Worker:', err));
         }
-
-        let deferredPrompt;
-        const installButton = document.getElementById('installButton');
-
-        // Detecta cuando se puede instalar la PWA y muestra el botón
-        window.addEventListener('beforeinstallprompt', (event) => {
-            // Previene que aparezca la ventana de instalación por defecto
-            event.preventDefault();
-            // Guarda el evento para que lo podamos mostrar más tarde
-            deferredPrompt = event;
-            // Muestra el botón de instalación
-            installButton.style.display = 'block';
-
-            // Cuando el usuario haga click en el botón de instalar
-            installButton.addEventListener('click', () => {
-                installButton.style.display = 'none';
-                // Muestra la ventana de instalación
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('El usuario aceptó la instalación');
-                    } else {
-                        console.log('El usuario rechazó la instalación');
-                    }
-                    deferredPrompt = null;
-                });
-            });
-        });
     </script>
 
     <!-- Sección de la aplicación -->
