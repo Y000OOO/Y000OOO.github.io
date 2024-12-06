@@ -1,10 +1,10 @@
 {
-  "name": "Mi Proyecto",
-  "short_name": "Proyecto",
+  "name": "Mi Aplicación PWA",
+  "short_name": "MiApp",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "theme_color": "#0078d7",
   "icons": [
     {
       "src": "icon-192x192.png",
