@@ -1,61 +1,20 @@
 let deferredPrompt;
 
-window.addEventListener('beforeinstallprompt', (event) => {
-  event.preventDefault();
-  deferredPrompt = event;
-
-  const installButton = document.createElement('button');
-  installButton.textContent = 'Instalar App';
-  installButton.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    background-color: #875803;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  `;
-  document.body.appendChild(installButton);
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const installButton = document.getElementById('installButton');
+  installButton.style.display = 'block';
 
   installButton.addEventListener('click', () => {
-    installButton.style.display = 'none';
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choice) => {
-      if (choice.outcome === 'accepted') {
-        console.log('PWA instalada');
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the A2HS prompt');
       } else {
-        console.log('PWA no instalada');
+        console.log('User dismissed the A2HS prompt');
       }
       deferredPrompt = null;
     });
   });
-});
-
-function notifyUser() {
-  if (Notification.permission === 'granted') {
-    navigator.serviceWorker.getRegistration().then((registration) => {
-      registration.showNotification('Tarea registrada con éxito');
-    });
-  }
-}
-
-document.getElementById('task-form').addEventListener('submit', function (e) {
-  e.preventDefault();
-  
-  const taskInput = document.getElementById('task-input');
-  const taskText = taskInput.value.trim();
-  if (taskText) {
-    const taskList = document.getElementById('task-list');
-    const taskItem = document.createElement('li');
-    taskItem.textContent = taskText;
-    taskList.appendChild(taskItem);
-    
-    // Notificar al usuario
-    notifyUser();
-
-    // Limpiar el campo de tarea
-    taskInput.value = '';
-  }
 });
